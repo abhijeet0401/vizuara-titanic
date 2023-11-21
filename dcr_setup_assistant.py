@@ -53,7 +53,6 @@ st.markdown("But fear not, intrepid coders! Luck played its part, and now, with 
 st.markdown("Who were the chosen ones? What magical traits increased the odds of survival?")
 st.markdown("Join us in this coding escapade as we summon the predictive model genie to answer: 'Who sails through the storm, and who succumbs to the waves?' 🌊🔮")
 
-
 dcr_data_options = ['Media & Advertising', 'None']
 
 # Create dcr object
@@ -182,11 +181,19 @@ survived_count = dataset[dataset["Survived"] == 1].groupby("Gender")["Survived"]
 not_survived_count = dataset[dataset["Survived"] == 0].groupby("Gender")["Survived"].count()
 survived = dataset[dataset['Survived'] == 1]
 not_survived = dataset[dataset['Survived'] == 0]
+
 dataset["Gender"] = dataset["Gender"].map({'male': 0, 'female': 1})
-X_final = dataset[['Gender','Pclass','Fare','Embarked']]
+X_final = dataset[['Gender','Pclass','Fare','Embarked','Age']]
 y_final = dataset[['Survived']]
+categorical_cols = X_final.select_dtypes(include=['object']).columns
+X_final = pd.get_dummies(X_final, columns=categorical_cols, drop_first=True)
+X_final_train, X_final_test, y_final_train, y_final_test = train_test_split(X_final, y_final, test_size=0.1, random_state=0)
 # Build form based on selected action
 if action == "Unveiling the  Dataset🐻‍❄":
+    video_path = "assets/Titanicfinal.mp4"  # Replace with the path to your local video file
+    st.video(open(video_path, 'rb').read())
+    
+
     st.subheader("❄️  Aboard the Titanic: Unveiling the Titanic Data! ❄️")
     st.markdown("Embark on a journey into the heart of the Titanic disaster dataset. 🚢💻 Explore the stories hidden in the numbers – from passenger class and age to gender and fare.")
     st.markdown("Each data point holds a piece of the puzzle, and together, we're about to decipher its secrets.")
@@ -358,7 +365,7 @@ elif action == "Shining in Darkness. ☃️":
         palette = sns.color_palette("Set2")
 
         # Plot for survived passengers by gender
-        fig_survived, ax_survived = plt.subplots(figsize=(8, 6))
+        fig_survived, ax_survived = plt.subplots(figsize=(4,3))
         sns.barplot(x=survived_percentage.index.map({0: "Male", 1: "Female"}), y=survived_percentage.values, palette=palette)
         ax_survived.set_xlabel("Gender")
         ax_survived.set_xlabel("Gender (0: Male, 1: Female)")
@@ -367,7 +374,7 @@ elif action == "Shining in Darkness. ☃️":
         st.pyplot(fig_survived)
 
         # Plot for Male passenFemale by gender
-        fig_not_survived, ax_not_survived = plt.subplots(figsize=(8, 6))
+        fig_not_survived, ax_not_survived = plt.subplots(figsize=(4,3))
         sns.barplot(x=not_survived_percentage.index.map({0: "Male", 1: "Female"}), y=not_survived_percentage.values, palette=palette)
         ax_not_survived.set_xlabel("Gender (0: Male, 1: Female)")
         ax_not_survived.set_ylabel("Not Survival Percentage")
@@ -659,7 +666,7 @@ elif action == "Shining in Darkness. ☃️":
 
     elif selected_option == "Age vs. Survival":
         st.subheader("Age vs. Survival")
-        fig = plt.figure(figsize=(15, 5))
+        fig = plt.figure(figsize=(10, 5))
         ax1 = fig.add_subplot(131)
         ax2 = fig.add_subplot(132)
         ax3 = fig.add_subplot(133)
@@ -909,18 +916,19 @@ elif action == "Engines of Prediction: Constructing the Model ⚓":
         
         decision_tree_model.fit(X_train, y_train)
 
-        st.write(confusion_matrix(y_test, decision_tree_pred))
+        
         acc = accuracy_score(y_test, decision_tree_pred)
-
+        if st.button('Run the Model'):
         # Display accuracy
-        if acc > 0.7:
-            st.success('Accuracy = {:.4f}%'.format(acc * 100))
-        elif acc > 0.6:
-            st.info('Accuracy = {:.4f}%'.format(acc * 100))
-        elif acc > 0.5:
-            st.warning('Accuracy = {:.4f}%'.format(acc * 100))
-        else:
-            st.error('Accuracy = {:.4f}%'.format(acc * 100))
+            st.write(confusion_matrix(y_test, decision_tree_pred))
+            if acc > 0.7:
+                st.success('Accuracy = {:.4f}%'.format(acc * 100))
+            elif acc > 0.6:
+                st.info('Accuracy = {:.4f}%'.format(acc * 100))
+            elif acc > 0.5:
+                st.warning('Accuracy = {:.4f}%'.format(acc * 100))
+            else:
+                st.error('Accuracy = {:.4f}%'.format(acc * 100))
 
 
             # Section for testing the model on custom features
@@ -929,16 +937,17 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
     st.markdown("""
     As our predictive odyssey concludes, reflect on the discoveries made. Summarize the tales told by the data, the impact of chosen features, and the prowess of our machine learning model. Our journey ends, leaving us with a newfound understanding of the Titanic disaster and the power of prediction.
     """)
-    categorical_cols = X_final.select_dtypes(include=['object']).columns
+    
     custom_data_list = []
     # Apply one-hot encoding to these categorical columns
-    X_final = pd.get_dummies(X_final, columns=categorical_cols, drop_first=True)
+    
     criterion_ ='gini'
-    max_ = 'log2'
+    max_ = 'sqrt'
     decision_tree_model = DecisionTreeClassifier(criterion=criterion_, random_state=0, max_features=max_)
 
-    decision_tree_model.fit(X_final, y_final)
-
+    decision_tree_model.fit(X_final_train, y_final_train)
+    decision_tree_pred = decision_tree_model.predict(X_final_test)
+    acc = accuracy_score(y_final_test, decision_tree_pred)
     with st.form(key='feature_form'):
         gender_mapping = {"Male": 0, "Female": 1}
         custom_feature_sliders = {}
@@ -952,11 +961,13 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
         custom_data_list.append(custom_feature_sliders['Pclass'])
         embarked_mapping = {"Cherbourg": "C", "Queenstown": "Q", "Southampton": "S"}
         selected_embarked = st.radio(f"Select Categorical Attribute for Embarked", ["Cherbourg", "Queenstown", "Southampton"])
-        
-        
+        selected_value = st.slider('How many you people are joining in the titanic ship', 0, 8, 4)
+        age_value = st.slider('What is your Age', 0, 82, 20)
+        custom_feature_sliders['Age']=age_value
+        custom_data_list.append(custom_feature_sliders['Age'])
         custom_feature_sliders['Embarked'] = embarked_mapping[selected_embarked]
         custom_data_list.append(custom_feature_sliders['Embarked'])
-        custom_feature_sliders['Name'] = st.text_input(f"Enter a value for Name")
+        custom_feature_sliders['Name'] = st.text_input(f"Enter your Name")
 
         # Use the model to make predictions on custom data
         submit_button = st.form_submit_button(label='Submit')
@@ -964,24 +975,28 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
     if submit_button:
 
         # Apply one-hot encoding to categorical features
-        custom_data = pd.DataFrame(index=[0], columns=X_final)
+        custom_data = pd.DataFrame({'Gender': [custom_feature_sliders['Gender']],
+                                'Pclass': [custom_feature_sliders['Pclass']],
+                                'Age': [custom_feature_sliders['Age']],
+                                'Embarked': [custom_feature_sliders['Embarked']],
+                                'Name': [custom_feature_sliders['Name']]})
         # Apply one-hot encoding to categorical features
         categorical_cols = custom_data.select_dtypes(include=['object']).columns
         custom_data_encoded = pd.get_dummies(custom_data, columns=categorical_cols, drop_first=True)
-        missing_cols = set(X_final.columns) - set(custom_data_encoded.columns)
+        missing_cols = set(X_final_train.columns) - set(custom_data_encoded.columns)
         for col in missing_cols:
             custom_data_encoded[col] = 0
 
         # Reorder columns to match training data
-        custom_data_encoded = custom_data_encoded[X_final.columns]
-
-        # Use the model to make predictions on custom data
-        custom_predictions = decision_tree_model.predict(custom_data_encoded)
-
+        custom_data_encoded = custom_data_encoded[X_final_train.columns]
         # Code to execute when the form is submitted
         st.subheader("Model Predictions on Custom Features:")
-        st.write("Predicted Survival:", "Survived" if custom_predictions[0] == 1 else "Not Survived")
+        custom_predictions = decision_tree_model.predict(custom_data_encoded)
+        st.subheader("Predicted Survival: " + ("Survived" if custom_predictions[0] == 1 else "Not Survived"))
         if custom_predictions[0] == 1:
-            st.image("survived.jpeg", caption="Survived", use_column_width=True)
+            st.image("./assets/survived.png", caption="Survived",width=500)
         else:
-            st.image("not_survived.jpg", caption="Not Survived", use_column_width=True)
+            st.image("./assets/notsurvived.png", caption="Not Survived",width=500)
+
+            
+
