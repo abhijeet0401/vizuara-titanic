@@ -23,6 +23,7 @@ import pydotplus
 import plotly.express as px
 import seaborn as sns
 from io import BytesIO
+
 # Page settings
 st.set_page_config(
     page_title="Vizuara AI Learning",
@@ -33,26 +34,85 @@ st.set_page_config(
         'About': "Survive the Titanic: Unraveling the Mystery with Machine Learning Magic!"
     }
 )
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        [data-testid="stSidebar"] {
+            background-image: linear-gradient(to right, #5170FF, #FF66C4);
+            color: #FFFFFF; /* Text color */
+        }
+        [data-testid="stSidebar"] a {
+            color: #FFFFFF; /* Link color */
+        }
+    </style>
+""", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #FFFFFF; /* Set global text color */
+        }
+        [data-testid="stSidebar"] {
+            background-image: linear-gradient(to right, #5170FF, #FF66C4);
+        }
+      
+        
+       
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+       
+        .custom-btn {
+            font-family: 'Open Sans', sans-serif;
+            background-image: linear-gradient(to right, #5170FF, #FF66C4);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition-duration: 0.4s;
+        }
+        /* On hover, slightly change the button appearance */
+        .custom-btn:hover {
+            background-image: linear-gradient(to right, #FF66C4, #5170FF);
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# Display the button using HTML inside markdown
+
 # Set up main page
 col1, col2 = st.columns((6, 1))
 col1.title("🏔 🚢Titanic Adventure: Unraveling Secrets with Machine Learning Magic❄️ 🚢")
 col2.image("assets/snowflake_dcr_multi.png", width=120)
-st.sidebar.image("assets/bear_snowflake_hello.png")
-action = st.sidebar.radio("What action would you like to take?", ("Unveiling the  Dataset🐻‍❄",
+st.sidebar.image("assets/Logo.png")
+st.sidebar.markdown('<hr style="margin-top: 20px; margin-bottom: 20px; border: 0;">', unsafe_allow_html=True)
+action = st.sidebar.radio(' What action would you like to take?', ("Unveiling the  Dataset🐻‍❄",
                                                                   "Navigating Data Waters 🐧️",
                                                                   "Shining in Darkness. ☃️",
                                                                   "Casting the Net 🏂🏽",
                                                                   "Engines of Prediction: Constructing the Model ⚓",
                                                                   "Safe Harbors: Concluding the Predictive Odyssey 🌊"))
 
-st.markdown("Ahoy, fellow data explorers! 🚢✨")
-st.markdown("Let's set sail on a Titanic adventure, where the waves of history crash against the iceberg of mystery.")
-st.markdown("Picture this: April 15, 1912, the 'unsinkable' RMS Titanic takes a plunge after an encounter with an iceberg.")
-st.markdown("Tragically, not enough lifeboats, and 1502 souls out of 2224 bid farewell to the Titanic voyage.")
-st.markdown("But fear not, intrepid coders! Luck played its part, and now, with your wit and wizardry, we're on a quest.")
-st.markdown("Who were the chosen ones? What magical traits increased the odds of survival?")
-st.markdown("Join us in this coding escapade as we summon the predictive model genie to answer: 'Who sails through the storm, and who succumbs to the waves?' 🌊🔮")
-
+st.markdown('Ahoy, fellow data explorers! 🚢✨')
+st.markdown('Let\'s set sail on a Titanic adventure, where the waves of history crash against the iceberg of mystery.')
+st.markdown('Picture this: April 15, 1912, the \'unsinkable\' RMS Titanic takes a plunge after an encounter with an iceberg.')
+st.markdown('Tragically, not enough lifeboats, and 1502 souls out of 2224 bid farewell to the Titanic voyage.')
+st.markdown('But fear not, intrepid coders! Luck played its part, and now, with your wit and wizardry, we\'re on a quest.')
+st.markdown('Who were the chosen ones? What magical traits increased the odds of survival?')
+st.markdown('Join us in this coding escapade as we summon the predictive model genie to answer: \'Who sails through the storm, and who succumbs to the waves?\' 🌊🔮')
+placeholder = st.empty()
+page=''
 dcr_data_options = ['Media & Advertising', 'None']
 
 # Create dcr object
@@ -188,6 +248,7 @@ y_final = dataset[['Survived']]
 categorical_cols = X_final.select_dtypes(include=['object']).columns
 X_final = pd.get_dummies(X_final, columns=categorical_cols, drop_first=True)
 X_final_train, X_final_test, y_final_train, y_final_test = train_test_split(X_final, y_final, test_size=0.1, random_state=0)
+test=''
 # Build form based on selected action
 if action == "Unveiling the  Dataset🐻‍❄":
     video_path = "assets/Titanicfinal.mp4"  # Replace with the path to your local video file
@@ -200,43 +261,21 @@ if action == "Unveiling the  Dataset🐻‍❄":
     if st.checkbox('Show data'):
         st.success("Here comes the dataset successfully")
         st.write(dataset.head())
-    # with st.form("initial_deployment_form"):
+    col1, col2 = st.columns([1, 1])
 
-        # st.subheader('Display the dataset')
+    with col1:
+        st.sidebar.markdown('<hr style="margin-top: 20px; margin-bottom: 10px; border: 0;">', unsafe_allow_html=True)
+        st.sidebar.markdown('<hr style="margin-top: 20px; margin-bottom: 20px; border: 0;">', unsafe_allow_html=True)
+        # st.button('Prev', key='button_prev')  # Setting a key to avoid button duplication
 
-        # display_data_attributes = st.checkbox("Show Data Attributes", value=True)    
+    with col2:
+        st.sidebar.markdown('<hr style="margin-top: 20px; margin-bottom: 10px; border: 0;">', unsafe_allow_html=True)
+        st.sidebar.markdown('<hr style="margin-top: 20px; margin-bottom: 20px; border: 0;">', unsafe_allow_html=True)
+
+        
 
 
-        # dcr_version = "DCR 5.5 General Availability"
-        # abbreviation = st.text_input("What database abbreviation would you like? (Leave blank for default)")
-        # provider_account = st.text_input(label="What is the Provider's account identifier?",
-        #                                  help="This should be just the account locator.  Anything beyond a '.' will be "
-        #                                       "removed automatically.")
-        # consumer_account = st.text_input(label="What is the Consumer's account identifier?",
-        #                                  help="This should be just the account locator.  Anything beyond a '.' will be "
-        #                                       "removed automatically.")
-        # dcr_data_selection = st.selectbox("Would you like to load demo data?", dcr_data_options)
-        # include_comments = st.checkbox("Include comments in scripts", True)
-
-        # submitted = st.form_submit_button("Run")
-
-        # if submitted:
-        #     if provider_account == consumer_account:
-        #         st.error("Provider and consumer cannot be the same account!")
-        #     else:
-        #         with st.spinner("Generating Clean Room Scripts..."):
-        #             data_clean_room.prepare_dcr_deployment(True, dcr_version, provider_account, None, consumer_account,
-        #                                                    None, abbreviation, path, dcr_data_selection)
-        #             data_clean_room.execute()
-
-        #         # Message dependent on debug or not
-        #         st.success("Scripts Ready for Download!")
-
-        #         # Populate zip buffer for download buttons
-        #         load_zip_buffer(data_clean_room, zip_buffer, include_comments)
-        #         st.snow()
-
-elif action == "Navigating Data Waters 🐧️":
+elif action == "Navigating Data Waters 🐧️" or page=="Navigating Data Waters 🐧️":
     # Form for adding consumers
     st.subheader("❄️ Distinct features within the data! ❄️")
     st.markdown("""
@@ -992,11 +1031,16 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
         # Code to execute when the form is submitted
         st.subheader("Model Predictions on Custom Features:")
         custom_predictions = decision_tree_model.predict(custom_data_encoded)
-        st.subheader("Predicted Survival: " + ("Survived" if custom_predictions[0] == 1 else "Not Survived"))
+        st.subheader("Prediction: ")
         if custom_predictions[0] == 1:
+            st.markdown('<button class="custom-btn">Survived</button>', unsafe_allow_html=True)
+
             st.image("./assets/survived.png", caption="Survived",width=500)
+            st.audio("videoplayback.webm", format='audio/webm')
         else:
+            st.markdown('<button class="custom-btn">Not Survived</button>', unsafe_allow_html=True)
             st.image("./assets/notsurvived.png", caption="Not Survived",width=500)
+            st.audio("sad.webm", format='audio/webm')
 
             
 
