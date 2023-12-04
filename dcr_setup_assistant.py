@@ -336,45 +336,51 @@ elif action == "Navigating Data Waters 🐧️" or page=="Navigating Data Waters
 # Label Encode Categorical Variable
     if True:
 
-        encode_option = st.radio("Select an Attribute for Categorical data", ["Gender", "PassengerId", "Fare",'Survival','Pclass','Age','SibSp','Parch','Ticket','Cabin','Embarked'], index=None)
-        
-        if encode_option == "Gender":
-            # Perform label encoding on the "Gender" column
+            encode_option = st.radio("Select an Attribute for Categorical data", ["Gender", "PassengerId", "Fare",'Survival','Pclass','Age','SibSp','Parch','Ticket','Cabin','Embarked'], index=None)
             
-            label_encoding_result = pd.DataFrame({
-                "Original Gender": ['male', 'female'],
-                "Encoded Value": [0, 1]
-            })
-            st.write(dataset["Gender"].head())
-            # Display the mapping results to the user
-            # st.write("Label Encoding Results:")
-            # st.table(label_encoding_result)
-            st.success("You successfully selected Categorical data")
-                       
-        elif encode_option == "PassengerId":
-            st.write(dataset["PassengerId"].head())
-            st.warning("PassengerID should not be encoded. It is a unique identifier for each passenger and does not carry meaningful information for the model. Encoding it could lead to confusion and misinterpretation of the data. Please select 'Gender' or 'Fare' and retry.")
-        elif encode_option == "Fare":
-            st.write(dataset["Fare"].head())
-            st.warning("Fare should not be encoded. It represents the ticket price, which is a continuous numerical value. Encoding it as a category would distort its meaningful numerical relationship and potentially lead to erroneous interpretations by the model. Leave 'Fare' as a numerical feature to allow the model to analyze it appropriately. Please select 'Gender' or 'PassengerId' and retry.")
-        elif encode_option == "Age":
-            st.write(dataset["Age"].head())
-            st.warning("Age is a numerical attribute representing the passenger's age. It should not be encoded as a category. Leave 'Age' as a numerical feature for the model to analyze it appropriately.")
+            if (encode_option == "Gender"): 
+                # Perform label encoding on the "Gender" column
+                
+                label_encoding_result = pd.DataFrame({
+                    "Original Gender": ['male', 'female'],
+                    "Encoded Value": [0, 1]
+                })
+                st.write(dataset["Gender"].head())
+                # Display the mapping results to the user
+                # st.write("Label Encoding Results:")
+                # st.table(label_encoding_result)
+                st.success("You successfully selected Categorical data")
+            elif encode_option == "Survival" :
+                st.write(dataset["Survived"].head())
+                st.success("You successfully selected Categorical data")
+                
+            elif encode_option == "Pclass"  :                        
+                st.write(dataset["Pclass"].head())
+                st.success("You successfully selected Categorical data")
+            elif encode_option == "PassengerId":
+                st.write(dataset["PassengerId"].head())
+                st.warning("PassengerID should not be encoded. It is a unique identifier for each passenger and does not carry meaningful information for the model. Encoding it could lead to confusion and misinterpretation of the data. Please select 'Gender' or 'Fare' and retry.")
+            elif encode_option == "Fare":
+                st.write(dataset["Fare"].head())
+                st.warning("Fare should not be encoded. It represents the ticket price, which is a continuous numerical value. Encoding it as a category would distort its meaningful numerical relationship and potentially lead to erroneous interpretations by the model. Leave 'Fare' as a numerical feature to allow the model to analyze it appropriately. Please select 'Gender' or 'PassengerId' and retry.")
+            elif encode_option == "Age":
+                st.write(dataset["Age"].head())
+                st.warning("Age is a numerical attribute representing the passenger's age. It should not be encoded as a category. Leave 'Age' as a numerical feature for the model to analyze it appropriately.")
 
-        elif encode_option == "SibSp":
-            st.write(dataset["SibSp"].head())
-            st.warning("SibSp is a numerical attribute representing the number of siblings or spouses traveling with each passenger. It should not be encoded as a category. Leave 'SibSp' as a numerical feature for the model to analyze it appropriately.")
+            elif encode_option == "SibSp":
+                st.write(dataset["SibSp"].head())
+                st.warning("SibSp is a numerical attribute representing the number of siblings or spouses traveling with each passenger. It should not be encoded as a category. Leave 'SibSp' as a numerical feature for the model to analyze it appropriately.")
 
-        elif encode_option == "Parch":
-            st.write(dataset["Parch"].head())
-            st.warning("Parch is a numerical attribute representing the number of parents or children traveling with each passenger. It should not be encoded as a category. Leave 'Parch' as a numerical feature for the model to analyze it appropriately.")
-        elif encode_option == "Ticket":
-            st.write(dataset["Ticket"].head())
-            st.warning("Ticket is a non-categorical attribute representing the ticket number. It should not be encoded as a category. Leave 'Ticket' as a non-categorical feature for the model to analyze it appropriately.")
+            elif encode_option == "Parch":
+                st.write(dataset["Parch"].head())
+                st.warning("Parch is a numerical attribute representing the number of parents or children traveling with each passenger. It should not be encoded as a category. Leave 'Parch' as a numerical feature for the model to analyze it appropriately.")
+            elif encode_option == "Ticket":
+                st.write(dataset["Ticket"].head())
+                st.warning("Ticket is a non-categorical attribute representing the ticket number. It should not be encoded as a category. Leave 'Ticket' as a non-categorical feature for the model to analyze it appropriately.")
 
-        elif encode_option == "Cabin":
-            st.write(dataset["Cabin"].head())
-            st.warning("Cabin is a non-categorical attribute representing the cabin number. It should not be encoded as a category. Leave 'Cabin' as a non-categorical feature for the model to analyze it appropriately.")
+            elif encode_option == "Cabin":
+                st.write(dataset["Cabin"].head())
+                st.warning("Cabin is a non-categorical attribute representing the cabin number. It should not be encoded as a category. Leave 'Cabin' as a non-categorical feature for the model to analyze it appropriately.")
 
 elif action == "Shining in Darkness. ☃️":
     # Form for adding providers
@@ -704,97 +710,39 @@ elif action == "Shining in Darkness. ☃️":
 
 
     elif selected_option == "Age vs. Survival":
-        st.subheader("Age vs. Survival")
-        fig = plt.figure(figsize=(10, 5))
-        ax1 = fig.add_subplot(131)
-        ax2 = fig.add_subplot(132)
-        ax3 = fig.add_subplot(133)
+        st.subheader("Age vs. Survival - Violin Plots")
 
-        # Create horizontal violin plots
-        # sns.violinplot(y="Embarked", x="Age", hue="Survived", data=dataset, split=True, orient="h", ax=ax1)
-        # sns.violinplot(y="Pclass", x="Age", hue="Survived", data=dataset, split=True, orient="h", ax=ax2)
-        # sns.violinplot(y="Gender", x="Age", hue="Survived", data=dataset, split=True, orient="h", ax=ax3)
-        sns.violinplot(y="Embarked", x="Age", hue="Survived", data=dataset, split=True, ax=ax1)
-        sns.violinplot(y="Pclass", x="Age", hue="Survived", data=dataset, split=True, ax=ax2)
-        sns.violinplot(y="Gender", x="Age", hue="Survived", data=dataset, split=True, ax=ax3)
+        fig, (ax1) = plt.subplots(1, 1, figsize=(15, 5))
+
+        sns.violinplot(y="Embarked", x="Age", hue="Survived", data=dataset, split=True, ax=ax1, palette="Set2")
+        handles, labels = ax1.get_legend_handles_labels()
+        ax1.legend(handles, ['Not Survived', 'Survived'], title='Survival', loc='best')
+
+
+        st.pyplot(fig)
+
+        st.markdown("""
+        **NOTE:**
+        1) From the Pclass violinplot, we can see that:
+            - 1st Pclass has fewer children compared to the other two classes.
+            - Almost all children (between age 0 to 10) of 2nd Pclass survived.
+            - Most children of 3rd Pclass survived.
+
+        2) From the Sex violinplot, we can see that:
+            - Most male children (age 0 to 14) survived.
+            - Females with age between 18 to 40 have a better survival chance.
+        """)
+
         
-        ax1.legend(title="Survival", labels=["Not Survived", "Survived"])
-        ax2.legend(title="Survival", labels=["Not Survived", "Survived"])
-        ax3.legend(title="Survival", labels=["Not Survived", "Survived"])
-        st.pyplot(fig)
-        # st.success("NOTE:")
-        # st.success("1) From the Pclass violinplot, we can see that:")
-        # st.success("- 1st Pclass has very few children as compared to other two classes.")
-        # st.success("- 1st Plcass has more old people as compared to other two classes.")
-        # st.success("- Almost all children (between age 0 to 10) of 2nd Pclass survived.")
-        # st.success("- Most children of 3rd Pclass survived.")
-        # st.success("- Younger people of 1st Pclass survived as compared to its older people.")
 
-        # st.success("2) From the Sex violinplot, we can see that:")
-        # st.success("- Most male children (between age 0 to 14) survived.")
-        # st.success("- Females with age between 18 to 40 have a better survival chance.")
         st.markdown("""
-    **NOTE:**
-    1) From the Pclass violinplot, we can see that:
+        **NOTE:**
 
-        - 1st Pclass has very few children as compared to other two classes.
-        - 1st Plcass has more old people as compared to other two classes.
-        - Almost all children (between age 0 to 10) of 2nd Pclass survived.
-        - Most children of 3rd Pclass survived.
-        - Younger people of 1st Pclass survived as compared to its older people.
-
-    2) From the Sex violinplot, we can see that:
-
-        - Most male children (between age 0 to 14) survived.
-        - Females with age between 18 to 40 have a better survival chance.
-    """)
-
-        total_survived = dataset[dataset['Survived'] == 1]
-        total_not_survived = dataset[dataset['Survived'] == 0]
-
-        # Create a Streamlit figure
-        fig = plt.figure(figsize=[15, 5])
-
-        # Create a subplot
-        plt.subplot(111)
-
-        # Create distribution plots
-        sns.distplot(total_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='blue')
-        sns.distplot(total_not_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='red', axlabel='Age')
-
-        # Set plot labels and titles
-
-        # Display the plot using st.pyplot
-        st.pyplot(fig)
-        male_survived = dataset[(dataset['Survived'] == 1) & (dataset['Gender'] == 0)]
-        female_survived = dataset[(dataset['Survived'] == 1) & (dataset['Gender'] == 1)]
-        male_not_survived = dataset[(dataset['Survived'] == 0) & (dataset['Gender'] == 0)]
-        female_not_survived = dataset[(dataset['Survived'] == 0) & (dataset['Gender'] == 1)]
-
-        # Create a Streamlit figure
-        fig = plt.figure(figsize=[15, 5])
-
-        # Create the first subplot
-        plt.subplot(121)
-        sns.distplot(female_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='blue')
-        sns.distplot(female_not_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='red', axlabel='Female Age')
-
-        # Create the second subplot
-        plt.subplot(122)
-        sns.distplot(male_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='blue')
-        sns.distplot(male_not_survived['Age'].dropna().values, bins=range(0, 81, 1), kde=True, color='red', axlabel='Male Age')
-
-        # Display the plot using st.pyplot
-        st.pyplot(fig)
-        st.markdown("""
-            **NOTE:**
-
-            From the above figures, we can see that:
-            - Combining both male and female, we can see that children with age between 0 to 5 have a better chance of survival.
-            - Females with age between "18 to 40" and "50 and above" have a higher chance of survival.
-            - Males with age between 0 to 14 have a better chance of survival.
-            """)
-
+        From the above figures, we can see that:
+        - Combining both male and female, children with ages 0 to 5 have a better chance of survival.
+        - Females with ages between 18 to 40 and 50 and above have a higher chance of survival.
+        - Males with ages between 0 to 14 have a better chance of survival.
+        """)
         st.write("Question:")
         st.write("What observations can be made from the plots showing the relationship between Pclass, Age, Gender, and Survival?")
 
@@ -1041,6 +989,10 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
             st.markdown('<button class="custom-btn">Not Survived</button>', unsafe_allow_html=True)
             st.image("./assets/notsurvived.png", caption="Not Survived",width=500)
             st.audio("sad.webm", format='audio/webm')
+
+            
+
+
 
             
 
