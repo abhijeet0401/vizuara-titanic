@@ -534,37 +534,28 @@ elif action == "Shining in Darkness. ☃️":
     elif selected_option == "Pclass & Gender vs. Survival":
         
         st.subheader("Pclass & Gender vs. Survival")
-        tab = pd.crosstab(dataset['Pclass'], dataset['Gender'])
-        percent_tab = (tab.div(tab.sum(1).astype(float), axis=0) * 100).round(1)  # Convert to percentages and round to one decimal place
 
-        # Define custom tick labels for the x-axis
+        tab = pd.crosstab(dataset['Pclass'], dataset['Gender'])
+        percent_tab = (tab.div(tab.sum(1).astype(float), axis=0) * 100).round(1)
+
         custom_labels = ['First Class', 'Second Class', 'Third Class']
 
-        # Plot the data
-        fig, ax = plt.subplots()
-        percent_tab.plot(kind="bar", stacked=False, ax=ax)
+        # Set Seaborn settings for larger plot and text
+     
 
-        # Set custom tick labels for the x-axis
-        ax.set_xticklabels(custom_labels)
+        # Plot using Seaborn's catplot
+        g = sns.catplot(
+            x="Gender", y="Survived", hue="Pclass", kind="bar", col="Pclass",
+            data=dataset, height=8,  palette="Set2"
+        )
 
-        # Set labels and title
-        plt.legend(['Male', 'Female'])
-        plt.xlabel('Pclass')
-        plt.ylabel('Percentage (%)')
-        plt.title('Survived Passengers by Pclass')
-
-        # Display the modified plot using st.pyplot
-        # st.pyplot(fig)
-        
-
-        factor_plot = sns.catplot(x="Gender", y="Survived", hue='Pclass', size=40, aspect=5 , data=dataset,height=100)
-        # st.pyplot(factor_plot)
-        dataset['Gender'] = dataset['Gender'].map({0: 'Female', 1: 'Male'})
-        sns.set(style="whitegrid")
-        plt.figure(figsize=(400, 200))
-        g = sns.catplot(x="Gender", y="Survived", hue="Pclass", kind="bar", col="Pclass", data=dataset)
+        # Set custom tick labels and plot titles
         g.set_axis_labels("Gender", "Survived")
-        st.pyplot(plt.gcf())
+        g.set_xticklabels(['Female', 'Male'])
+        g.set_titles("Pclass {col_name}")
+
+        st.pyplot(g.fig)
+
         st.write("This is a catplot showing the relationship between Gender, Survived, and Pclass.")
 
         # Convert the notes into st.success messages
@@ -989,10 +980,6 @@ elif action =="Safe Harbors: Concluding the Predictive Odyssey 🌊":
             st.markdown('<button class="custom-btn">Not Survived</button>', unsafe_allow_html=True)
             st.image("./assets/notsurvived.png", caption="Not Survived",width=500)
             st.audio("sad.webm", format='audio/webm')
-
-            
-
-
 
             
 
